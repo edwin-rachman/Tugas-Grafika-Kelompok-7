@@ -3,12 +3,9 @@
 Drawing::Drawing (int x, int y) : x(x), y(y) {
 }
 
-Drawing::~Drawing () {
-  while (!drawables.empty()) {
-    delete drawables.back();
-    drawables.pop_back();
-  }
+Drawing::~Drawing (){
 }
+
 
 void Drawing::add (Drawable *drawable) {
   drawable->transform(x, y);
