@@ -30,20 +30,20 @@ int main() {
   
   Drawing drawing(0, frameBuffer.getHeight());
   
-  int letter_width = 70;
-  int letter_height = 90;
+  int letter_width = 25;
+  int letter_height = 35;
   std::map<char, Drawing *> letters;
-  for (char c = 'a'; c <= 'u'; ++c) {
+  for (char c = 'a'; c <= 'z'; ++c) {
     std::stringstream font_file;
     font_file << "font/" << c << ".txt";
-    letters[c] = BuildChar(0, 0, font_file.str().c_str(), letter_width, letter_height, 0xFF, 0x00, 0x00);
+    letters[c] = BuildChar(0, 0, font_file.str().c_str(), letter_width, letter_height, 0x00, 0xFF, 0x00);
   }
   
-  std::string text = "abcde fg\na";
+  std::string text = "tugas grafika komputer dua\nkelompok tujuh\nnursyahrina\nfarhan makarim\nm rizki duwinanto\nedwin rachman\nprama legawa halqavi\nsuhendi\nlouis leslie";
   int x = 0;
   int y = 0;
-  int width = 80;
-  int height = 100;
+  int width = 30;
+  int height = 40;
   for (auto& c : text) {
     if (c == '\n') {
       x = 0;
