@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Line.h"
 #include "Drawing.h"
+#include "CharBuilder.h"
 
 int main() {
   std::cout << "\e[?25l" << std::flush;
@@ -19,10 +20,12 @@ int main() {
   drawing2.add(new Line(0, 0, 100, 100, 0xFF, 0xFF, 0xFF));
   drawing2.add(new Line(100, 0, 100, 100, 0xFF, 0xFF, 0xFF));
   drawing2.add(new Line(0, 0, 100, 0, 0xFF, 0xFF, 0xFF));
-  
+
   Drawing drawing(0, frameBuffer.getHeight());
   drawing.add(&drawing1);
   drawing.add(&drawing2);
+  drawing.add(BuildChar(300, 0, "font/a.txt", 100, 80, 0xFF, 0x00, 0x00));
+
   
   timespec delay, rem;
   delay.tv_sec = 0;
