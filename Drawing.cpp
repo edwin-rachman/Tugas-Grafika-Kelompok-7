@@ -4,10 +4,6 @@ Drawing::Drawing (int x, int y) : x(x), y(y) {
 }
 
 Drawing::~Drawing () {
-  while (!drawables.empty()) {
-    delete drawables.back();
-    drawables.pop_back();
-  }
 }
 
 void Drawing::add (Drawable *drawable) {
