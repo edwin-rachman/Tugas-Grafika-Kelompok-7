@@ -3,7 +3,7 @@
 Drawing::Drawing (int x, int y) : x(x), y(y) {
 }
 
-Drawing::~Drawing (){
+Drawing::~Drawing () {
 }
 
 
