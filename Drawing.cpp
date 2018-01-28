@@ -6,6 +6,7 @@ Drawing::Drawing (int x, int y) : x(x), y(y) {
 Drawing::~Drawing () {
 }
 
+
 void Drawing::add (Drawable *drawable) {
   drawable->transform(x, y);
   drawables.push_back(drawable);
