@@ -13,6 +13,7 @@ private:
   
 public:
   Drawing (int x, int y);
+  ~Drawing ();
   void add (Drawable *drawable);
   void draw (FrameBuffer& frameBuffer);
   void transform (int d_x, int d_y);
