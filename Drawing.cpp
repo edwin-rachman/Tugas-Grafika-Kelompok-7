@@ -17,9 +17,7 @@ Drawable *Drawing::clone () {
 }
 
 Drawing::~Drawing () {
-  for (auto &drawable : drawables) {
-    delete drawable;
-  }
+
 }
 
 void Drawing::add (Drawable *drawable) {
