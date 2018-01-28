@@ -1,3 +1,6 @@
+#ifndef DRAWMAP_H
+#define DRAWMAP_H
+
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
@@ -22,3 +25,5 @@ public:
 	int getXOffset ();
 	int getYOffset ();
 };
+
+#endif

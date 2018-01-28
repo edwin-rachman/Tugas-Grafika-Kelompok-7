@@ -34,8 +34,17 @@ uint32_t FrameBuffer::getColor(uint8_t r, uint8_t g, uint8_t b) {
 }
 	
 void FrameBuffer::setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
-	long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
-	*((uint32_t*)(back_buffer + location)) = getColor(r, g, b);
+	if (x >= 0 && y >= 0 && x < getWidth() && y < getHeight()) {
+		long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + (y + vinfo.yoffset) * finfo.line_length;
+		*((uint32_t*)(back_buffer + location)) = getColor(r, g, b);
+	}
+}
+
+void FrameBuffer::fill(uint8_t r, uint8_t g, uint8_t b) {
+  uint32_t color = getColor(r, g, b);
+  for (int i = 0; i < screen_size; ++i) {
+    *((uint32_t*)(back_buffer + i)) = color;
+  }
 }
 	
 void FrameBuffer::swapBuffers() {;

@@ -1,3 +1,6 @@
+#ifndef FRAMEBUFFER_H
+#define FRAMEBUFFER_H
+
 #include <linux/fb.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
@@ -23,5 +26,8 @@ public:
 	int getHeight();
 	uint32_t getColor(uint8_t r, uint8_t g, uint8_t b);
 	void setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
+  void fill(uint8_t r, uint8_t g, uint8_t b);
 	void swapBuffers();
 };
+
+#endif
