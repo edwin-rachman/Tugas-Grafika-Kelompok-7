@@ -3,9 +3,24 @@
 Drawing::Drawing (int x, int y) : x(x), y(y) {
 }
 
-Drawing::~Drawing () {
+
+Drawing::Drawing (const Drawing& drawing) {
+  x = drawing.x;
+  y = drawing.y;
+  for (auto& drawable : drawing.drawables) {
+    drawables.push_back(drawable->clone());
+  }
 }
 
+Drawable *Drawing::clone () {
+  return new Drawing(*this);
+}
+
+Drawing::~Drawing () {
+  for (auto &drawable : drawables) {
+    delete drawable;
+  }
+}
 
 void Drawing::add (Drawable *drawable) {
   drawable->transform(x, y);

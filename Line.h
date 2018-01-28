@@ -17,6 +17,7 @@ private:
 	
 public:
 	Line(int x_0, int y_0, int x_1, int y_1, uint8_t r, uint8_t g, uint8_t b);
+  Drawable *clone();
 	void draw(FrameBuffer& frameBuffer);
 	void transform(int d_x, int d_y);
 };

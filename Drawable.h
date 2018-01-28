@@ -7,6 +7,7 @@ class Drawable {
 public:
   virtual void draw(FrameBuffer& frameBuffer) = 0;
   virtual void transform(int d_x, int d_y) = 0;
+  virtual Drawable *clone() = 0;
 };
 
 #endif

@@ -13,6 +13,8 @@ private:
   
 public:
   Drawing (int x, int y);
+  Drawing (const Drawing& drawing);
+  Drawable *clone ();
   ~Drawing ();
   void add (Drawable *drawable);
   void draw (FrameBuffer& frameBuffer);

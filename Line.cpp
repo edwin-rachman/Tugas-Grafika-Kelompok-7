@@ -4,6 +4,10 @@ Line::Line(int x_0, int y_0, int x_1, int y_1, uint8_t r, uint8_t g, uint8_t b)
  : x_0(x_0), y_0(y_0), x_1(x_1), y_1(y_1), r(r), g(g), b(b) {
 }
 
+Drawable *Line::clone () {
+  return new Line(*this);
+}
+
 void Line::draw(FrameBuffer& frameBuffer) {
   int d_x = x_1 - x_0;
   int d_y = y_1 - y_0;
