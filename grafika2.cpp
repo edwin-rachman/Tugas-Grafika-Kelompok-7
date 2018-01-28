@@ -24,7 +24,7 @@ int main() {
   Drawing drawing(0, frameBuffer.getHeight());
   drawing.add(&drawing1);
   drawing.add(&drawing2);
-  drawing.add(BuildChar(300, 0, "font/a.txt", 100, 80, 0xFF, 0x00, 0x00));
+  drawing.add(BuildChar(350, 0, "font/a.txt", 80, 100, 0xFF, 0x00, 0x00));
 
   
   timespec delay, rem;
