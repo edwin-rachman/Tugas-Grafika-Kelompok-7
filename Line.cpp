@@ -45,6 +45,8 @@ void Line::draw(FrameBuffer& frameBuffer) {
   }
 }
 
+
+
 void Line::transform(int d_x, int d_y) {
   x_0 += d_x;
   y_0 += d_y;
