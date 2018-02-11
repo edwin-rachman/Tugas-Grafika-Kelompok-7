@@ -25,8 +25,11 @@ public:
 	int getWidth();
 	int getHeight();
 	uint32_t getColor(uint8_t r, uint8_t g, uint8_t b);
-	void setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
-  void fill(uint8_t r, uint8_t g, uint8_t b);
+  uint32_t getPixel(int x, int y);
+  uint32_t getPixel(uint8_t *buffer, int width, int height, int x, int y);
+	void setPixel(int x, int y, uint32_t color);
+  void setPixel(uint8_t *buffer, int width, int height, int x, int y, uint32_t color);
+  void fill(uint32_t color);
 	void swapBuffers();
 };
 
