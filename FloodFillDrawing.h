@@ -7,20 +7,25 @@
 
 class FloodFillDrawing : public Drawable {
 private:
-  int x;
-  int y;
-  int width;
-  int height;
+  Point origin;
+  Point buffer_tl;
+  Point buffer_br;
+  Drawing& drawing;
+  uint8_t r;
+  uint8_t g;
+  uint8_t b;
   uint8_t *buffer;
-  void colorPoint(FrameBuffer& frameBuffer, std::queue<std::pair<int, int>>& queue, int x, int y, uint32_t color);
+  void colorPoint(FrameBuffer& frameBuffer, std::queue<Point *>& queue, int x, int y, uint32_t color);
   
 public:
-  FloodFillDrawing(int x, int y, int width, int height, FrameBuffer& frameBuffer, Drawing& drawing, int start_x, int start_y, int r, int g, int b);
+  FloodFillDrawing(float x, float y, float buffer_l, float buffer_t, float buffer_r, float buffer_b, Drawing& drawing, uint8_t r, uint8_t g, uint8_t b);
   FloodFillDrawing(const FloodFillDrawing& floodFillDrawing);
   Drawable *clone ();
   void draw(FrameBuffer& frameBuffer);
-  void draw(FrameBuffer& frameBuffer, uint8_t* buffer, int width, int height);
-  void transform(int d_x, int d_y);
+  void draw(FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height);
+  void translate(float d_x, float d_y);
+  void scale (float s_x, float s_y);
+  void rotate (float radian);
 };
 
 #endif

@@ -1,34 +1,24 @@
 #include "FloodFillDrawing.h"
 
-void FloodFillDrawing::colorPoint(FrameBuffer& frameBuffer, std::queue<std::pair<int, int>>& queue, int x, int y, uint32_t color) {
+void FloodFillDrawing::colorPoint(FrameBuffer& frameBuffer, std::queue<Point *>& queue, int x, int y, uint32_t color) {
+  int width = buffer_br.getX() - buffer_tl.getX() + 1;
+  int height = buffer_br.getY() - buffer_tl.getY() + 1;
+  
   if (x >= 0 && x < width && y >= 0 && y < height && frameBuffer.getPixel(buffer, width, height, x, y) != color) {
     frameBuffer.setPixel(buffer, width, height, x, y, color);
-    queue.push(std::make_pair(x, y));
+    queue.push(new Point(x, y));
   }
 }
 
-FloodFillDrawing::FloodFillDrawing(int x, int y, int width, int height, FrameBuffer& frameBuffer, Drawing& drawing, int start_x, int start_y, int r, int g, int b) 
-  : x(x), y(y), width(width), height(height) {
-  buffer = (uint8_t *) mmap(0, width * height * sizeof(uint32_t) , PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, (off_t) 0);
-  drawing.draw(frameBuffer, buffer, width, height);
+FloodFillDrawing::FloodFillDrawing(float x, float y, float buffer_l, float buffer_t, float buffer_r, float buffer_b, Drawing& drawing, uint8_t r, uint8_t g, uint8_t b) 
+  : origin(x, y), buffer_tl(buffer_l, buffer_t), buffer_br(buffer_r, buffer_b), drawing(drawing), r(r), g(g), b(b) {
+  /*
   
   uint32_t color = frameBuffer.getColor(r, g, b);
-  std::queue<std::pair<int, int>> queue;
-  colorPoint(frameBuffer, queue, start_x, start_y, color);
-  
-  while (!queue.empty()) {
-    auto point = queue.front();
-    
-    colorPoint(frameBuffer, queue, point.first - 1, point.second, color);
-    colorPoint(frameBuffer, queue, point.first + 1, point.second, color);
-    colorPoint(frameBuffer, queue, point.first, point.second - 1, color);
-    colorPoint(frameBuffer, queue, point.first, point.second + 1, color);
-    
-    queue.pop();
-  }
+  std::queue<std::pair<int, int>> queue;*/
 }
 
-FloodFillDrawing::FloodFillDrawing(const FloodFillDrawing& floodFillDrawing) {
+FloodFillDrawing::FloodFillDrawing(const FloodFillDrawing& floodFillDrawing) : origin(origin), buffer_tl(buffer_tl), buffer_br(buffer_br), drawing(drawing) {
 }
 
 Drawable *FloodFillDrawing::clone () {
@@ -36,9 +26,31 @@ Drawable *FloodFillDrawing::clone () {
 }
 
 void FloodFillDrawing::draw(FrameBuffer& frameBuffer) {
+  int width = buffer_br.getX() - buffer_tl.getX() + 1;
+  int height = buffer_br.getY() - buffer_tl.getY() + 1;
+  uint32_t color = frameBuffer.getColor(r, g, b);
+  
+  buffer = (uint8_t *) mmap(0, width * height * sizeof(uint32_t) , PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, (off_t) 0);
+  drawing.draw(frameBuffer, buffer, width, height);
+  
+  std::queue<Point *> queue;
+  colorPoint(frameBuffer, queue, origin.getX(), origin.getY(), color);
+  
+  while (!queue.empty()) {
+    Point *point = queue.front();
+    
+    colorPoint(frameBuffer, queue, point->getX() - 1, point->getY(), color);
+    colorPoint(frameBuffer, queue, point->getX() + 1, point->getY(), color);
+    colorPoint(frameBuffer, queue, point->getX(), point->getY() - 1, color);
+    colorPoint(frameBuffer, queue, point->getX(), point->getY() + 1, color);
+    
+    delete point;
+    queue.pop();
+  }
+  
   for (int buffer_y = 0; buffer_y < height; ++buffer_y) {
     for (int buffer_x = 0; buffer_x < width; ++buffer_x) {
-      frameBuffer.setPixel(x + buffer_x, y + buffer_y, frameBuffer.getPixel(buffer, width, height, buffer_x, buffer_y));
+      frameBuffer.setPixel(buffer_tl.getX() + buffer_x, buffer_tl.getY() + buffer_y, frameBuffer.getPixel(buffer, width, height, buffer_x, buffer_y));
     }
   }
 }
@@ -46,8 +58,23 @@ void FloodFillDrawing::draw(FrameBuffer& frameBuffer) {
 void FloodFillDrawing::draw(FrameBuffer& frameBuffer, uint8_t* buffer, int width, int height) {
 }
 
-void FloodFillDrawing::transform(int d_x, int d_y) {
-  x += d_x;
-  y += d_y;
+void FloodFillDrawing::translate(float d_x, float d_y) {
+  //drawing.translate(d_x, d_y);
+  origin.translate(d_x, d_y);
+  buffer_tl.translate(d_x, d_y);
+  buffer_br.translate(d_x, d_y);
 }
 
+void FloodFillDrawing::scale (float s_x, float s_y) {
+  drawing.scale(s_x, s_y);
+  origin.scale(s_x, s_y);
+  buffer_tl.scale(s_x, s_y);
+  buffer_br.scale(s_x, s_y);
+}
+
+void FloodFillDrawing::rotate (float radian) {
+  //drawing.rotate(radian);
+  origin.rotate(radian);
+  buffer_tl.rotate(radian);
+  buffer_br.rotate(radian);
+}
