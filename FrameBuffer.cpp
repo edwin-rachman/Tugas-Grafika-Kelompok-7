@@ -63,6 +63,6 @@ void FrameBuffer::fill(uint32_t color) {
   }
 }
 	
-void FrameBuffer::swapBuffers() {;
-		memcpy(front_buffer, back_buffer, screen_size);
+void FrameBuffer::swapBuffers() {
+  memcpy(front_buffer, back_buffer, screen_size);
 }

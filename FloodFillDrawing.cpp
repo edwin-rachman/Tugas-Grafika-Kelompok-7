@@ -33,7 +33,7 @@ void FloodFillDrawing::draw(FrameBuffer& frameBuffer) {
   buffer = (uint8_t *) mmap(0, width * height * sizeof(uint32_t) , PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, (off_t) 0);
   drawing.draw(frameBuffer, buffer, width, height);
   
-  std::queue<Point *> queue;
+  /*std::queue<Point *> queue;
   colorPoint(frameBuffer, queue, origin.getX(), origin.getY(), color);
   
   while (!queue.empty()) {
@@ -46,7 +46,7 @@ void FloodFillDrawing::draw(FrameBuffer& frameBuffer) {
     
     delete point;
     queue.pop();
-  }
+  }*/
   
   for (int buffer_y = 0; buffer_y < height; ++buffer_y) {
     for (int buffer_x = 0; buffer_x < width; ++buffer_x) {
@@ -59,22 +59,22 @@ void FloodFillDrawing::draw(FrameBuffer& frameBuffer, uint8_t* buffer, int width
 }
 
 void FloodFillDrawing::translate(float d_x, float d_y) {
-  //drawing.translate(d_x, d_y);
+  drawing.translate(d_x, d_y);
   origin.translate(d_x, d_y);
   buffer_tl.translate(d_x, d_y);
   buffer_br.translate(d_x, d_y);
 }
 
-void FloodFillDrawing::scale (float s_x, float s_y) {
-  drawing.scale(s_x, s_y);
-  origin.scale(s_x, s_y);
-  buffer_tl.scale(s_x, s_y);
-  buffer_br.scale(s_x, s_y);
+void FloodFillDrawing::scale (float scale_x, float scale_y, float origin_x, float origin_y) {
+  drawing.scale(scale_x, scale_y, origin_x, origin_y);
+  origin.scale(scale_x, scale_y, origin_x, origin_y);
+  buffer_tl.scale(scale_x, scale_y, origin_x, origin_y);
+  buffer_br.scale(scale_x, scale_y, origin_x, origin_y);
 }
 
-void FloodFillDrawing::rotate (float radian) {
-  //drawing.rotate(radian);
-  origin.rotate(radian);
-  buffer_tl.rotate(radian);
-  buffer_br.rotate(radian);
+void FloodFillDrawing::rotate (float angle, float origin_x, float origin_y) {
+  drawing.rotate(angle, origin_x, origin_y);
+  origin.rotate(angle, origin_x, origin_y);
+  buffer_tl.rotate(angle, origin_x, origin_y);
+  buffer_br.rotate(angle, origin_x, origin_y);
 }

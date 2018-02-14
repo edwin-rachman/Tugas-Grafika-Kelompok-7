@@ -1,7 +1,7 @@
 #include "Line.h"
 
 Line::Line(float x_0, float y_0, float x_1, float y_1, uint8_t r, uint8_t g, uint8_t b)
- : p0(x_0, y_0), p1(x_1, y_1), r(r), g(g), b(b) {
+ : origin(0, 0), p0(x_0, y_0), p1(x_1, y_1), r(r), g(g), b(b) {
 }
 
 Drawable *Line::clone () {
@@ -83,19 +83,19 @@ void Line::draw(FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height
 }
 
 
-void Line::translate(float d_x, float d_y) {
-  p0.translate(d_x, d_y);
-  p1.translate(d_x, d_y);
+void Line::translate(float translate_x, float translate_y) {
+  p0.translate(translate_x, translate_y);
+  p1.translate(translate_x, translate_y);
 }
 
-void Line::scale(float s_x, float s_y) {
-  p0.scale(s_x, s_y);
-  p1.scale(s_x, s_y);
+void Line::scale(float scale_x, float scale_y, float origin_x, float origin_y) {
+  p0.scale(scale_x, scale_y, origin_x, origin_y);
+  p1.scale(scale_x, scale_y, origin_x, origin_y);
 }
 
-void Line::rotate(float radian) {
-  p0.rotate(radian);
-  p1.rotate(radian);
+void Line::rotate(float angle, float origin_x, float origin_y) {
+  p0.rotate(angle, origin_x, origin_y);
+  p1.rotate(angle, origin_x, origin_y);
 }
 
 Point Line::getTop() {
