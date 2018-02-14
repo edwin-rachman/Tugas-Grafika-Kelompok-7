@@ -62,18 +62,55 @@ int main() {
   pilot.add(new Line(0.2f, -1.2f, 0.2f, -1.6f, 0xFF, 0xFF, 0xFF));
   pilot.scale(10, 10);
   
-  Drawing parachute(0, -pilot_height);
-  parachute.add(new Line(0, 0, -0.3f, -1.7f, 0xFF, 0xFF, 0xFF));
-  parachute.add(new Line(0, 0, 0.3f, -1.7f, 0xFF, 0xFF, 0xFF));
-  parachute.add(new Line(0, 0, 0.9f, -1.2f, 0xFF, 0xFF, 0xFF));
-  parachute.add(new Line(0, 0, -0.9f, -1.2f, 0xFF, 0xFF, 0xFF));
+  Drawing parachute(0, -pilot_height); 
+  parachute.add(new Line(0, 0, -0.3f, -1.7f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0, 0, 0.3f, -1.7f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0, 0, 0.9f, -1.2f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0, 0, -0.9f, -1.2f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0.9f, -1.2f, 0.3f, -1.7f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(-0.9f, -1.2f, -0.3f, -1.7f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(-0.3f, -1.7f, 0.3f, -1.7f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0.3f, -1.7f, 0.9f, -1.2f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(-0.9f, -1.2f, -1.2f, -1.5f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0.9f, -1.2f,1.2f, -1.5f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(-1.2f, -1.5f, -1.0f, -1.9f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(-1.0f, -1.9f, -0.6f, -2.2f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(-0.6f, -2.2f, 0, -2.3f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0, -2.3f, 0.6f, -2.2f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(0.6f, -2.2f, 1.0f, -1.9f, 0xFF, 0xFF, 0xFF)); 
+  parachute.add(new Line(1.0f, -1.9f, 1.2f, -1.5f, 0xFF, 0xFF, 0xFF)); 
   parachute.scale(10, 10);
   
+  Drawing wheel(0, 0);
+  int segments = 18;
+  float pos[segments][2];
+  for (int i = 0; i < segments; i++) {
+	pos[i][0] = std::cos(2 * pi * i / segments);
+	pos[i][1] = std::sin(2 * pi * i / segments);
+  }
+  for (int i = 0; i < segments; i++) {
+	int n = i + 1;
+	if (n == segments) {
+      n = 0;
+	}
+	wheel.add(new Line(pos[i][0], pos[i][1], pos[n][0], pos[n][1], 0xFF, 0xFF, 0xFF));
+	float factor = 0.6f;
+	wheel.add(new Line(pos[i][0] * factor, pos[i][1] * factor, pos[n][0] * factor, pos[n][1] * factor, 0xFF, 0xFF, 0xFF));
+  }
+  wheel.scale(10, 10);
+  
+  wheel.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2);
   pilot.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2 - pilot_height * 2);
   parachute.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2 - pilot_height * 2);
 
-  float land_y_pos = frameBuffer.getHeight();
+  float w_x = frameBuffer.getWidth() / 2;
+  float w_y = frameBuffer.getHeight() / 2 + 5;
+  float w_v_x = 7;
+  float w_v_y = -6;
 
+  float land_y_pos = frameBuffer.getHeight();
+  float bounciness = 0.6f;
+  float drag = 0.03f;
   float velocity = -10;
   float accel = 3;
   float deccel = 0.7f;
@@ -86,10 +123,20 @@ int main() {
     frameBuffer.fill(frameBuffer.getColor(0x00, 0x00, 0x00));
 	
 	if (time <= 21) {
-		plane.draw(frameBuffer);
+		bullets_center.draw(frameBuffer);
+	} else {
+		wheel.draw(frameBuffer);
+		w_v_x = (1 - drag) * w_v_x;
+		w_v_y += (1 - deccel) * accel;
+		w_x += w_v_x;
+		w_y += w_v_y;
+		wheel.translate(w_v_x, w_v_y);
+		if (w_y > land_y_pos) {
+			w_v_y *= -1 * bounciness;
+			wheel.translate(0, land_y_pos - w_y);
+			w_y = land_y_pos;
+		}
 	}
-	
-    bullets_center.draw(frameBuffer);
     bullets_left.draw(frameBuffer);
     bullets_right.draw(frameBuffer);
     if (time > 19) {
@@ -107,6 +154,9 @@ int main() {
 			pilot.translate(0, land_y_pos - y_pos);
 			y_pos = land_y_pos;
 		}
+	}
+	if (time < 100) {
+		plane.draw(frameBuffer);
 	}
     frameBuffer.swapBuffers();
     nanosleep(&delay, &rem);
