@@ -23,8 +23,10 @@ int main() {
   }
 
   Drawing rotor(0, 0);
-  rotor.add(new Line(-2, 0, 2, 0, 0x00, 0xFF, 0x00));
-  rotor.add(new Line(0, -2, 0, 2, 0x00, 0xFF, 0x00));
+  rotor.add(new Line(-2, 0, -0.5f, 0, 0x00, 0xFF, 0x00));
+  rotor.add(new Line(0.5f, 0, 2, 0, 0x00, 0xFF, 0x00));
+  rotor.add(new Line(0, -2, 0, -0.5f, 0x00, 0xFF, 0x00));
+  rotor.add(new Line(0, 0.5f, 0, 2, 0x00, 0xFF, 0x00));
   rotor.add(new Line(-2, 0, -1.5f, 0.5f, 0x00, 0xFF, 0x00));
   rotor.add(new Line(-1.5f, 0.5f, 0, 0.5f, 0x00, 0xFF, 0x00));
   rotor.add(new Line(2, 0, 1.5f, -0.5f, 0x00, 0xFF, 0x00));
@@ -45,7 +47,9 @@ int main() {
   plane.add(new Line(0, -4, -2, -1, 0x00, 0xFF, 0x00));
   plane.add(new Line(-2, -1, -9, 1, 0x00, 0xFF, 0x00));
   plane.add(&rotor);
-  //FloodFillDrawing planeFill(7, 6, 0, 0, 20, 20, plane, 0x00, 0xFF, 0x00); 
+  //FloodFillDrawing planeFill(0, 0, -10, -10, 10, 10, plane, 0x00, 0xFF, 0x00); 
+  //plane.add(&planeFill);
+  
   float height = 0;
   plane.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2);
   rotor.translate(0, - height / 2);
@@ -83,6 +87,7 @@ int main() {
   
   Drawing wheel(0, 0);
   int segments = 18;
+  float wheel_size = 5;
   float pos[segments][2];
   for (int i = 0; i < segments; i++) {
 	pos[i][0] = std::cos(2 * pi * i / segments);
@@ -93,18 +98,18 @@ int main() {
 	if (n == segments) {
       n = 0;
 	}
-	wheel.add(new Line(pos[i][0], pos[i][1], pos[n][0], pos[n][1], 0xFF, 0xFF, 0xFF));
-	float factor = 0.6f;
-	wheel.add(new Line(pos[i][0] * factor, pos[i][1] * factor, pos[n][0] * factor, pos[n][1] * factor, 0xFF, 0xFF, 0xFF));
+	wheel.add(new Line(pos[i][0], pos[i][1], pos[n][0], pos[n][1], 0x0, 0xFF, 0x0));
+	float factor = 0.4f;
+	wheel.add(new Line(pos[i][0] * factor, pos[i][1] * factor, pos[n][0] * factor, pos[n][1] * factor, 0x0, 0xFF, 0x0));
   }
-  wheel.scale(10, 10);
+  wheel.scale(wheel_size, wheel_size);
   
   wheel.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2);
   pilot.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2 - pilot_height * 2);
   parachute.translate(frameBuffer.getWidth()/2, frameBuffer.getHeight()/2 - pilot_height * 2);
 
   float w_x = frameBuffer.getWidth() / 2;
-  float w_y = frameBuffer.getHeight() / 2 + 5;
+  float w_y = frameBuffer.getHeight() / 2 + wheel_size / 2;
   float w_v_x = 7;
   float w_v_y = -6;
 
@@ -157,6 +162,10 @@ int main() {
 	}
 	if (time < 100) {
 		plane.draw(frameBuffer);
+		//planeFill.draw(frameBuffer);
+	}
+	if ((time >= 21) && (time <= 21)) {
+		frameBuffer.fill(frameBuffer.getColor(0xFF, 0xCC, 0xFF));
 	}
     frameBuffer.swapBuffers();
     nanosleep(&delay, &rem);
