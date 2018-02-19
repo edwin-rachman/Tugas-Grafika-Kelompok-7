@@ -28,9 +28,9 @@ void Drawing::draw (FrameBuffer& frameBuffer) {
   }
 }
 
-void Drawing::draw (FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height) {
+void Drawing::clippedDraw(FrameBuffer& frameBuffer, float left, float top, float right, float bottom) {
   for (auto& drawable : drawables) {
-    drawable->draw(frameBuffer, buffer, width, height);
+    drawable->clippedDraw(frameBuffer, left, top, right, bottom);
   }
 }
 

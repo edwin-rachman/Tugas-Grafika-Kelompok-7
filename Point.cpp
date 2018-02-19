@@ -14,7 +14,24 @@ float Point::getY() {
 void Point::draw (FrameBuffer& frameBuffer) {
 }
 
-void Point::draw (FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height) {
+void Point::clippedDraw(FrameBuffer& frameBuffer, float left, float top, float right, float bottom) {
+}
+
+char Point::calculateOutcode(float left, float top, float right, float bottom) {
+  char outcode = INSIDE;
+  if (x < left) {
+    outcode |= LEFT;
+  }
+  else if (x > right) {
+    outcode |= RIGHT;
+  }
+  if (y < top) {
+    outcode |= TOP;
+  }
+  else if (y > bottom) {
+    outcode |= BOTTOM;
+  }
+  return outcode;
 }
 
 void Point::translate (float translate_x, float translate_y) {
