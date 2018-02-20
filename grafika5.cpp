@@ -2,6 +2,7 @@
 #include <ctime>
 #include "Line.h"
 #include "Drawing.h"
+#include "FloodFill.h"
 #include "KeyboardInputListener.h"
 
 const float PI = std::acos(-1);
@@ -14,15 +15,15 @@ int main() {
   keyboardInputListener.start();
   
   Drawing plane(0, 0);
-  plane.add(new Line(-9, 5, -2, 5, 0x00, 0xFF, 0x00));
-  plane.add(new Line(-2, 5, -1, 7, 0x00, 0xFF, 0x00));
-  plane.add(new Line(-1, 7, 1, 7, 0x00, 0xFF, 0x00));
-  plane.add(new Line(1, 7, 2, 5, 0x00, 0xFF, 0x00));
-  plane.add(new Line(2, 5, 9, 5, 0x00, 0xFF, 0x00));
-  plane.add(new Line(9, 5, 2, 3, 0x00, 0xFF, 0x00));
-  plane.add(new Line(2, 3, 0, 0, 0x00, 0xFF, 0x00));
-  plane.add(new Line(0, 0, -2, 3, 0x00, 0xFF, 0x00));
-  plane.add(new Line(-2, 3, -9, 5, 0x00, 0xFF, 0x00));
+  plane.add(new Line(-9, 5, -2, 5, 0x00, 0x00, 0xFF));
+  plane.add(new Line(-2, 5, -1, 7, 0x00, 0x00, 0xFF));
+  plane.add(new Line(-1, 7, 1, 7, 0x00, 0x00, 0xFF));
+  plane.add(new Line(1, 7, 2, 5, 0x00, 0x00, 0xFF));
+  plane.add(new Line(2, 5, 9, 5, 0x00, 0x00, 0xFF));
+  plane.add(new Line(9, 5, 2, 3, 0x00, 0x00, 0xFF));
+  plane.add(new Line(2, 3, 0, 0, 0x00, 0x00, 0xFF));
+  plane.add(new Line(0, 0, -2, 3, 0x00, 0x00, 0xFF));
+  plane.add(new Line(-2, 3, -9, 5, 0x00, 0x00, 0xFF));
   
   Drawing pilot(0, 0);
   pilot.add(new Line(-0.5f, 0, 0, -0.65f, 0xFF, 0xFF, 0xFF));
@@ -47,17 +48,18 @@ int main() {
   float bottom = 400;
   
   Drawing box(0, 0);
-  box.add(new Line(left, top, right, top, 0x00, 0x00, 0xFF));
-  box.add(new Line(right, top, right, bottom, 0x00, 0x00, 0xFF));
-  box.add(new Line(right, bottom, left, bottom, 0x00, 0x00, 0xFF));
-  box.add(new Line(left, bottom, left, top, 0x00, 0x00, 0xFF));
+  box.add(new Line(left, top, right, top, 0x00, 0xFF, 0x00));
+  box.add(new Line(right, top, right, bottom, 0x00, 0xFF, 0x00));
+  box.add(new Line(right, bottom, left, bottom, 0x00, 0xFF, 0x00));
+  box.add(new Line(left, bottom, left, top, 0x00, 0xFF, 0x00));
   
   Drawing box2(0, 0);
-  box2.add(new Line(left, top, right, top, 0x00, 0x00, 0xFF));
-  box2.add(new Line(right, top, right, bottom, 0x00, 0x00, 0xFF));
-  box2.add(new Line(right, bottom, left, bottom, 0x00, 0x00, 0xFF));
-  box2.add(new Line(left, bottom, left, top, 0x00, 0x00, 0xFF));
+  box2.add(new Line(left, top, right, top, 0x00, 0xFF, 0x00));
+  box2.add(new Line(right, top, right, bottom, 0x00, 0xFF, 0x00));
+  box2.add(new Line(right, bottom, left, bottom, 0x00, 0xFF, 0x00));
+  box2.add(new Line(left, bottom, left, top, 0x00, 0xFF, 0x00));
   box2.translate(350, 0);
+
   
   bool running = true;
   int time = 0;
@@ -87,6 +89,21 @@ int main() {
     plane.clippedDraw(frameBuffer, left, top, right, bottom);
     plane.clippedDraw(frameBuffer, left + 350, top, right + 350, bottom);
     plane.translate(10, 0);
+    FloodFill(frameBuffer, 0, 0, 0x36, 0xE4, 0xF9);
+    // Fill from a line.
+    for (int i = 12; i < 12 + (25 * scale); i += (25 * scale) / 10) {
+      FloodFill(frameBuffer, plane.getOrigin().getX() - i, plane.getOrigin().getY(), 0x00, 0x00, 0xFF);
+    }
+    // Fill 1st box from 4 sides.
+    FloodFill(frameBuffer, left, top, right, bottom, left + 1, top + 1, 0x00, 0xFF, 0x00);
+    FloodFill(frameBuffer, left, top, right, bottom, right - 1, top + 1, 0x00, 0xFF, 0x00);
+    FloodFill(frameBuffer, left, top, right, bottom, right - 1, bottom - 1, 0x00, 0xFF, 0x00);
+    FloodFill(frameBuffer, left, top, right, bottom, left + 1, bottom - 1, 0x00, 0xFF, 0x00);
+    // Fill 2nd box from 4 sides.
+    FloodFill(frameBuffer, left + 350, top, right + 350, bottom, left + 1 + 350, top + 1, 0x00, 0xFF, 0x00);
+    FloodFill(frameBuffer, left + 350, top, right + 350, bottom, right - 1 + 350, top + 1, 0x00, 0xFF, 0x00);
+    FloodFill(frameBuffer, left + 350, top, right + 350, bottom, right - 1 + 350, bottom - 1, 0x00, 0xFF, 0x00);
+    FloodFill(frameBuffer, left + 350, top, right + 350, bottom, left + 1 + 350, bottom - 1, 0x00, 0xFF, 0x00);
     frameBuffer.swapBuffers();
   }
   

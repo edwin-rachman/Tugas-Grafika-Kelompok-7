@@ -58,3 +58,7 @@ void Point::rotate (float angle, float origin_x, float origin_y) {
 Drawable *Point::clone() {
   return new Point(*this);
 }
+
+bool Point::operator<(const Point& other) const {
+  return (x < other.x) | (x == other.x && y < other.y);
+}

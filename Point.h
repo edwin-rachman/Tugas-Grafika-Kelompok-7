@@ -26,6 +26,8 @@ public:
   void scale (float scale_x, float scale_y, float origin_x, float origin_y);
   void rotate (float angle, float origin_x, float origin_y);
   Drawable *clone();
+
+  bool operator<(const Point& other) const;
 };
 
 #endif
