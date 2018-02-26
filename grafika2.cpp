@@ -1,16 +1,25 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+<<<<<<< HEAD
 #include <sstream>
 #include <map>
 #include "Line.h"
 #include "Drawing.h"
 #include "CharBuilder.h"
+=======
+#include <map>
+#include "Line.h"
+#include "Drawing.h"
+#include "Text.h"
+
+>>>>>>> new
 
 int main() {
   std::cout << "\e[?25l" << std::flush;
-  
+  Text text("letter.txt", 0, 100, "AAA");
   FrameBuffer frameBuffer("/dev/fb0");
+<<<<<<< HEAD
   Drawing text(0, frameBuffer.getHeight());
   
   int letter_width = 25;
@@ -53,6 +62,22 @@ int main() {
     bullets_left.add(new Line(i * 40, i * 40, i * 40 + 10, i * 40 + 10, 0xFF, 0x00, 0x00));
     bullets_right.add(new Line(-i * 40, i * 40, -i * 40 - 10, i * 40 + 10, 0xFF, 0x00, 0x00));
   }
+=======
+
+  
+  /*
+  Drawing drawing1(100, 0);
+  drawing1.add(new Line(0, 0, 100, 100, 0xFF, 0xFF, 0xFF));
+  drawing1.add(new Line(100, 0, 100, 100, 0xFF, 0xFF, 0xFF));
+  drawing1.add(new Line(0, 0, 100, 0, 0xFF, 0xFF, 0xFF));
+  
+  Drawable *drawing2 = drawing1.clone();
+  drawing2->transform(100, 0);
+  
+  Drawing drawing(0, frameBuffer.getHeight());
+  drawing.add(&drawing1);
+  drawing.add(drawing2);*/
+>>>>>>> new
   
   timespec delay, rem;
   delay.tv_sec = 0;

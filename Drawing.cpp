@@ -1,6 +1,16 @@
 #include "Drawing.h"
 
-Drawing::Drawing (int x, int y) : x(x), y(y) {
+Drawing::Drawing (float x, float y) : origin(x, y) {
+}
+
+Drawing::Drawing (const Drawing& drawing) : origin(drawing.origin) {
+  for (auto& drawable : drawing.drawables) {
+    drawables.push_back(drawable->clone());
+  }
+}
+
+Drawable *Drawing::clone () {
+  return new Drawing(*this);
 }
 
 
@@ -21,7 +31,7 @@ Drawing::~Drawing () {
 }
 
 void Drawing::add (Drawable *drawable) {
-  drawable->transform(x, y);
+  drawable->translate(origin.getX(), origin.getY());
   drawables.push_back(drawable);
 }
 
@@ -31,18 +41,29 @@ void Drawing::draw (FrameBuffer& frameBuffer) {
   }
 }
 
-void Drawing::transform (int d_x, int d_y) {
-  x += d_x;
-  y += d_y;
+void Drawing::draw (FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height) {
   for (auto& drawable : drawables) {
-    drawable->transform(d_x, d_y);
+    drawable->draw(frameBuffer, buffer, width, height);
   }
 }
 
-int Drawing::getX () {
-  return x;
+void Drawing::translate (float d_x, float d_y) {
+  origin.translate(d_x, d_y);
+  for (auto& drawable : drawables) {
+    drawable->translate(d_x, d_y);
+  }
 }
 
-int Drawing::getY () {
-  return y;
+void Drawing::scale (float s_x, float s_y) {
+  origin.scale(s_x, s_y);
+  for (auto& drawable : drawables) {
+    drawable->scale(s_x, s_y);
+  }
+}
+
+void Drawing::rotate (float radian) {
+  origin.rotate(radian);
+  for (auto& drawable : drawables) {
+    drawable->rotate(radian);
+  }
 }
