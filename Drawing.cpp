@@ -35,35 +35,43 @@ void Drawing::add (Drawable *drawable) {
   drawables.push_back(drawable);
 }
 
+void Drawing::remove (Drawable *drawable) {
+  drawables.erase(std::remove(drawables.begin(), drawables.end(), drawable), drawables.end());
+}
+
 void Drawing::draw (FrameBuffer& frameBuffer) {
   for (auto& drawable : drawables) {
     drawable->draw(frameBuffer);
   }
 }
 
-void Drawing::draw (FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height) {
+void Drawing::clippedDraw(FrameBuffer& frameBuffer, float left, float top, float right, float bottom) {
   for (auto& drawable : drawables) {
-    drawable->draw(frameBuffer, buffer, width, height);
+    drawable->clippedDraw(frameBuffer, left, top, right, bottom);
   }
 }
 
-void Drawing::translate (float d_x, float d_y) {
-  origin.translate(d_x, d_y);
+void Drawing::translate (float translate_x, float translate_y) {
+  origin.translate(translate_x, translate_y);
   for (auto& drawable : drawables) {
-    drawable->translate(d_x, d_y);
+    drawable->translate(translate_x, translate_y);
   }
 }
 
-void Drawing::scale (float s_x, float s_y) {
-  origin.scale(s_x, s_y);
+void Drawing::scale (float scale_x, float scale_y, float origin_x, float origin_y) {
+  origin.scale(scale_x, scale_y, origin_x, origin_y);
   for (auto& drawable : drawables) {
-    drawable->scale(s_x, s_y);
+    drawable->scale(scale_x, scale_y, origin_x, origin_y);
   }
 }
 
-void Drawing::rotate (float radian) {
-  origin.rotate(radian);
+void Drawing::rotate (float angle, float origin_x, float origin_y) {
+  origin.rotate(angle, origin_x, origin_y);
   for (auto& drawable : drawables) {
-    drawable->rotate(radian);
+    drawable->rotate(angle, origin_x, origin_y);
   }
+}
+
+Point Drawing::getOrigin () {
+  return origin;
 }

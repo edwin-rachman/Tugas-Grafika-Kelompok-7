@@ -11,7 +11,7 @@ FrameBuffer::FrameBuffer(const char *file_desc_path) {
 	ioctl(file_desc, FBIOGET_VSCREENINFO, &vinfo);
 	ioctl(file_desc, FBIOGET_FSCREENINFO, &finfo);
 	
-	screen_size = vinfo.yres_virtual * finfo.line_length;
+	screen_size = vinfo.yres * finfo.line_length;
 	front_buffer = (uint8_t *) mmap(0, screen_size, PROT_READ | PROT_WRITE, MAP_SHARED, file_desc, (off_t) 0);
 	back_buffer = (uint8_t *) mmap(0, screen_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, (off_t) 0);
 }
@@ -63,6 +63,6 @@ void FrameBuffer::fill(uint32_t color) {
   }
 }
 	
-void FrameBuffer::swapBuffers() {;
-		memcpy(front_buffer, back_buffer, screen_size);
+void FrameBuffer::swapBuffers() {
+  memcpy(front_buffer, back_buffer, screen_size);
 }

@@ -8,7 +8,10 @@ grafika3:
 	g++ grafika3.cpp FrameBuffer.cpp Line.cpp Drawing.cpp FloodFillDrawing.cpp -o grafika3 -std=c++11
 
 grafika4:
-	g++ grafika4.cpp FrameBuffer.cpp Point.cpp Line.cpp Drawing.cpp FloodFillDrawing.cpp -o grafika4 -std=c++11
+	g++ grafika4.cpp FrameBuffer.cpp KeyboardInputListener.cpp Point.cpp Line.cpp Drawing.cpp FloodFillDrawing.cpp -o grafika4 -std=c++11
+
+grafika5:
+	g++ grafika5.cpp FrameBuffer.cpp KeyboardInputListener.cpp Point.cpp Line.cpp Drawing.cpp -o grafika5 -std=c++11
 
 clean:
 	-rm -rf grafika1 grafika2 grafika3 grafika4

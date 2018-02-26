@@ -18,7 +18,7 @@ private:
 	long screen_size;
 	uint8_t *front_buffer;
 	uint8_t *back_buffer;
-	
+
 public:
 	FrameBuffer(const char *file_desc_path);
 	~FrameBuffer();

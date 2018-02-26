@@ -24,8 +24,8 @@ public:
   void draw(FrameBuffer& frameBuffer);
   void draw(FrameBuffer& frameBuffer, uint8_t *buffer, int width, int height);
   void translate(float d_x, float d_y);
-  void scale (float s_x, float s_y);
-  void rotate (float radian);
+  void scale (float scale_x, float scale_y, float origin_x, float origin_y);
+  void rotate (float angle, float origin_x, float origin_y);
 };
 
 #endif
