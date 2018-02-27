@@ -18,7 +18,15 @@ void FloodFill(FrameBuffer& frameBuffer, int x, int y, uint8_t r, uint8_t g, uin
     FloodFill(frameBuffer, 0, 0, frameBuffer.getWidth(), frameBuffer.getHeight(), x, y, r, g, b);
 }
 
+void FloodFill(FrameBuffer& frameBuffer, int x, int y, uint32_t rgb) {
+    FloodFill(frameBuffer, 0, 0, frameBuffer.getWidth(), frameBuffer.getHeight(), x, y, rgb);
+}
+
 void FloodFill(FrameBuffer& frameBuffer, int lt_x, int lt_y, int br_x, int br_y, int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+    FloodFill(frameBuffer, lt_x, lt_y, br_x, br_y, x, y, frameBuffer.getColor(r, g, b));
+}
+
+void FloodFill(FrameBuffer& frameBuffer, int lt_x, int lt_y, int br_x, int br_y, int x, int y, uint32_t color) {
     queue<Point> next;
     int size = (br_x - lt_x) * (br_y - lt_y);
     bool * processed = new bool[size];
@@ -30,7 +38,6 @@ void FloodFill(FrameBuffer& frameBuffer, int lt_x, int lt_y, int br_x, int br_y,
     Point origin(x, y);
     all.push_back(origin);
     next.push(origin);
-    uint32_t color = frameBuffer.getColor(r, g, b);
     // Depth first flood filling.
     while (!next.empty()) {
         Point curr = next.front();

@@ -2,6 +2,7 @@
 #define DRAWABLE_H
 
 #include "FrameBuffer.h"
+#include "Point.h"
 
 class Drawable {
 public:
@@ -10,6 +11,8 @@ public:
   virtual void translate(float translate_x, float translate_y) = 0;
   virtual void scale(float scale_x, float scale_y, float origin_x, float origin_y) = 0;
   virtual void rotate(float angle, float origin_x, float origin_y) = 0;
+  virtual Point minBoundary() = 0;
+  virtual Point maxBoundary() = 0;
   virtual Drawable *clone() = 0;
 };
 

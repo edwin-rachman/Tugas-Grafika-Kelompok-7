@@ -11,10 +11,6 @@ Drawable *Line::clone () {
   return new Line(*this);
 }
 
-Drawable *Line::clone () {
-  return new Line(*this);
-}
-
 void Line::draw(FrameBuffer& frameBuffer) {
   int d_x = p1.getX() - p0.getX();
   int d_y = p1.getY() - p0.getY();
@@ -183,3 +179,34 @@ Point Line::getLeft() {
 Point Line::getRight() {
   return p0.getX() > p1.getX() ? p0 : p1;
 }
+
+Point Line::minBoundary() {
+  Point p;
+  if (p0.getX() < p1.getX()) {
+    p.setX(p0.getX());
+  } else {
+    p.setX(p1.getX());
+  }
+  if (p0.getY() < p1.getY()) {
+    p.setY(p0.getY());
+  } else {
+    p.setY(p1.getY());
+  }
+  return p;
+}
+
+Point Line::maxBoundary() {
+  Point p;
+  if (p0.getX() > p1.getX()) {
+    p.setX(p0.getX());
+  } else {
+    p.setX(p1.getX());
+  }
+  if (p0.getY() > p1.getY()) {
+    p.setY(p0.getY());
+  } else {
+    p.setY(p1.getY());
+  }
+  return p;
+}
+

@@ -1,5 +1,8 @@
 #include "Point.h"
 
+Point::Point(): x(0), y(0) {
+}
+
 Point::Point(float x, float y) : x(x), y(y) {
 }
 
@@ -11,10 +14,12 @@ float Point::getY() {
   return y;
 }
 
-void Point::draw (FrameBuffer& frameBuffer) {
+void Point::setX(float v) {
+  x = v;
 }
 
-void Point::clippedDraw(FrameBuffer& frameBuffer, float left, float top, float right, float bottom) {
+void Point::setY(float v) {
+  y = v;
 }
 
 char Point::calculateOutcode(float left, float top, float right, float bottom) {
@@ -53,10 +58,6 @@ void Point::rotate (float angle, float origin_x, float origin_y) {
   x = temp_x * std::cos(angle) - temp_y * std::sin(angle);
   y = temp_x * std::sin(angle) + temp_y * std::cos(angle);
   translate(origin_x, origin_y);
-}
-
-Drawable *Point::clone() {
-  return new Point(*this);
 }
 
 bool Point::operator<(const Point& other) const {

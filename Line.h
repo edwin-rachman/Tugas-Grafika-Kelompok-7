@@ -2,6 +2,7 @@
 #define LINE_H
 
 #include <cmath>
+#include "Drawable.h"
 #include "Point.h"
 
 class Line : public Drawable {
@@ -34,6 +35,8 @@ public:
   Point getBottom();
   Point getLeft();
   Point getRight();
+  Point minBoundary();
+  Point maxBoundary();
 };
 
 #endif
