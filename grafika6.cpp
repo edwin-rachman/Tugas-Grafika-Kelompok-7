@@ -56,17 +56,17 @@ int main() {
     
     bool running = true;
 
-    float left = 0;
-    float top = 0;
-    float right = frameBuffer.getWidth();
-    float bottom = frameBuffer.getHeight();
+    float left = 100;
+    float top = 100;
+    float right = frameBuffer.getWidth()-100;
+    float bottom = frameBuffer.getHeight()-100;
 
     float move_speed = 5;
 
     float scale = 1;
     float d_scale = 1.05f;
-    float sc = 1.33f;
-    root.scale(sc, sc, root.getOrigin().getX(), root.getOrigin().getY());
+    //float sc = 1.33f;
+    //root.scale(sc, sc, root.getOrigin().getX(), root.getOrigin().getY());
 
     float size_x = root.maxBoundary().getX() - root.minBoundary().getX();
     float size_y = root.maxBoundary().getY() - root.minBoundary().getY();
@@ -75,7 +75,28 @@ int main() {
     float pos_y = (frameBuffer.getHeight() - size_y) / 2;
     // float pos_x = 0;
     // float pos_y = 0;
+	
+	float minimap_scale = 0.25f;
+	Drawable * minimap = root.clone();
+	minimap->scale(minimap_scale, minimap_scale, 0, 0);
+	
+	float m_size_x = minimap->maxBoundary().getX() - minimap->minBoundary().getX();
+	float m_size_y = minimap->maxBoundary().getY() - minimap->minBoundary().getY();
 
+	float b_size_x = ((right - left) / size_x) * m_size_x;
+	float b_size_y = ((bottom - top) / size_y) * m_size_y;
+
+	float cursor_scale_x = m_size_x / size_x;
+	float cursor_scale_y = m_size_y / size_y;
+	float cursor_scale = 1;
+
+	Drawing cursor(0, 0);
+	cursor.add(new Line(0, 0, b_size_x, 0, 0x00, 0xFF, 0x00));
+	cursor.add(new Line(b_size_x, 0, b_size_x, b_size_y, 0x00, 0xFF, 0x00));
+	cursor.add(new Line(b_size_x, b_size_y, 0, b_size_y, 0x00, 0xFF, 0x00));
+	cursor.add(new Line(0, b_size_y, 0, 0, 0x00, 0xFF, 0x00));
+
+	cursor.translate((m_size_x - b_size_x) / 2, (m_size_y - b_size_y) / 2);
     root.translate(pos_x, pos_y);
 
     bool show_b = false;
@@ -91,27 +112,39 @@ int main() {
                     break;
                 case 120: // X Key
                     scale /= d_scale;
-                    root.scale(1/d_scale, 1/d_scale, root.getOrigin().getX(), root.getOrigin().getY());
+                    root.scale(1/d_scale, 1/d_scale, left + (right - left)/2, top + (bottom - top)/2);
+                    cursor.scale(d_scale, d_scale, cursor.getOrigin().getX() + (b_size_x * cursor_scale) / 2, cursor.getOrigin().getY() + (b_size_y * cursor_scale) / 2);
+                    cursor_scale_x *= d_scale;
+                    cursor_scale_y *= d_scale;
+                    cursor_scale *= d_scale;
                     break;
                 case 122: // Z Key
                     scale *= d_scale;
-                    root.scale(d_scale, d_scale, root.getOrigin().getX(), root.getOrigin().getY());
+                    root.scale(d_scale, d_scale, left + (right - left)/2, top + (bottom - top)/2);
+                    cursor.scale(1/d_scale, 1/d_scale, cursor.getOrigin().getX() + (b_size_x * cursor_scale) / 2, cursor.getOrigin().getY() + (b_size_y * cursor_scale) / 2);
+                    cursor_scale_x /= d_scale;
+                    cursor_scale_y /= d_scale;
+                    cursor_scale /= d_scale;
                     break;
                 case 97: // A key
-                    pos_x -= move_speed;
-                    root.translate(-move_speed, 0);
-                    break;
-                case 100: // D key
                     pos_x += move_speed;
                     root.translate(move_speed, 0);
+                    cursor.translate(-move_speed * cursor_scale_x, 0);
+                    break;
+                case 100: // D key
+                    pos_x -= move_speed;
+                    root.translate(-move_speed, 0);
+                    cursor.translate(move_speed * cursor_scale_x, 0);
                     break;
                 case 119: // W key
-                    pos_y -= move_speed;
-                    root.translate(0, -move_speed);
-                    break;
-                case 115: // S key
                     pos_y += move_speed;
                     root.translate(0, move_speed);
+                    cursor.translate(0, -move_speed * cursor_scale_y);
+                    break;
+                case 115: // S key
+                    pos_y -= move_speed;
+                    root.translate(0, -move_speed);
+                    cursor.translate(0, move_speed * cursor_scale_y);
                     break;
             }
         }
@@ -122,7 +155,8 @@ int main() {
             b_image.draw(frameBuffer);
         }
         root.clippedDraw(frameBuffer, left, top, right, bottom);
-
+		minimap->draw(frameBuffer);
+        cursor.draw(frameBuffer);
         frameBuffer.swapBuffers();
     }
     

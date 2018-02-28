@@ -6,6 +6,23 @@ Drawing::Drawing (float x, float y) : origin(x, y) {
 Drawing::Drawing (const Drawing& drawing) : origin(drawing.origin) {
   for (auto& drawable : drawing.drawables) {
     drawables.push_back(drawable->clone());
+    // Recalculate boundary.
+	  float min_x = drawable->minBoundary().getX();
+	  float min_y = drawable->minBoundary().getY();
+	  float max_x = drawable->maxBoundary().getX();
+	  float max_y = drawable->maxBoundary().getY();
+	  if (min_x < _minBoundary.getX()) {
+		_minBoundary.setX(min_x);
+	  }
+	  if (min_y < _minBoundary.getY()) {
+		_minBoundary.setY(min_y);
+	  }
+	  if (max_x > _maxBoundary.getX()) {
+		_maxBoundary.setX(max_x);
+	  }
+	  if (max_y > _maxBoundary.getY()) {
+		_maxBoundary.setY(max_y);
+	  };
   }
 }
 
