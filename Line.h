@@ -37,6 +37,8 @@ public:
   Point getRight();
   Point minBoundary();
   Point maxBoundary();
+  Point getPointOrigin();
+  Point getPointDestination();
 };
 
 #endif

@@ -210,3 +210,9 @@ Point Line::maxBoundary() {
   return p;
 }
 
+Point Line::getPointOrigin() {
+  return p0;
+}
+Point Line::getPointDestination() {
+  return p1;
+}

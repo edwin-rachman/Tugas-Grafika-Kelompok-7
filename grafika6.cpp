@@ -45,7 +45,7 @@ int main() {
 
     Drawing buildings(0, 0);
     for (int i = 2; i <= 65; i++) {
-        buildings.add(BuildChar(0, 0, "buildings/scrapped_" + to_string(i) + ".txt", 1, 1, 0xFF, 0xFF, 0xFF));
+        buildings.add(BuildCharFilled(0, 0, "buildings/scrapped_" + to_string(i) + ".txt", 1, 1, 0xFF, 0xFF, 0xFF));
     }
     root.add(&buildings);
     Drawing assembly_points(0, 0);
@@ -155,6 +155,7 @@ int main() {
             b_image.draw(frameBuffer);
         }
         root.clippedDraw(frameBuffer, left, top, right, bottom);
+        // root.draw(frameBuffer);
 		minimap->draw(frameBuffer);
         cursor.draw(frameBuffer);
         frameBuffer.swapBuffers();

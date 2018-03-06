@@ -13,5 +13,12 @@ grafika4:
 grafika5:
 	g++ grafika5.cpp FrameBuffer.cpp KeyboardInputListener.cpp Point.cpp Line.cpp Drawing.cpp -o grafika5 -std=c++11
 
+grafika6:
+	g++ grafika6.cpp FrameBuffer.cpp KeyboardInputListener.cpp Point.cpp Line.cpp Drawing.cpp Image.cpp CharBuilder.cpp FilledDrawing.cpp FloodFill.cpp IntersectionMap.cpp -o grafika6 -std=c++11
+
+tes_fill:
+	g++ tes_fill.cpp FrameBuffer.cpp KeyboardInputListener.cpp Point.cpp Line.cpp Drawing.cpp Image.cpp CharBuilder.cpp FilledDrawing.cpp FloodFill.cpp IntersectionMap.cpp -o tes_fill -std=c++11
+
+
 clean:
-	-rm -rf grafika1 grafika2 grafika3 grafika4
+	-rm -rf grafika1 grafika2 grafika3 grafika4 grafika5 grafika6 tes_fill
