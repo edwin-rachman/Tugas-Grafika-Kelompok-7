@@ -34,9 +34,7 @@ void FloodFill(FrameBuffer& frameBuffer, int lt_x, int lt_y, int br_x, int br_y,
     for (int j = 0; j < size; j++) {
         processed[j] = false;
     }
-    vector<Point> all;
     Point origin(x, y);
-    all.push_back(origin);
     next.push(origin);
     // Depth first flood filling.
     while (!next.empty()) {

@@ -19,6 +19,7 @@ public:
     bool setPoint(int x, int y);
     bool getPoint(int x, int y);
     void calculateIntersections(std::vector<Line *> lines);
+    void floodFill();
     int getX();
     int getY();
     int getWidth();

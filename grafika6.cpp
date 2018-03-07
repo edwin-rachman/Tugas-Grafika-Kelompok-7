@@ -50,7 +50,7 @@ int main() {
     root.add(&buildings);
     Drawing assembly_points(0, 0);
     for (int i = 66; i <= 81; i++) {
-        assembly_points.add(BuildChar(0, 0, "assembly_points/scrapped_" + to_string(i) + ".txt", 1, 1, 0xFF, 0xAA, 0x00));
+        assembly_points.add(BuildCharFilled(0, 0, "assembly_points/scrapped_" + to_string(i) + ".txt", 1, 1, 0xFF, 0xAA, 0x00));
     }
     root.add(&assembly_points);
     

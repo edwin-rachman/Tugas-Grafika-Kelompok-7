@@ -16,8 +16,8 @@ private:
 public:
   Point();
   Point(float x, float y);
-  float getX();
-  float getY();
+  float getX() const;
+  float getY() const;
   void setX(float v);
   void setY(float v);
   

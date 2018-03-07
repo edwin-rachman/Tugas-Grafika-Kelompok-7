@@ -18,7 +18,7 @@ protected:
 public:
   Drawing (float x, float y);
   Drawing (const Drawing& drawing);
-  Drawable *clone ();
+  virtual Drawable *clone ();
   virtual void add (Drawable *drawable);
   virtual void remove (Drawable *drawable);
   virtual void draw (FrameBuffer& frameBuffer);

@@ -1,6 +1,8 @@
 #include "IntersectionMap.h"
 #include "Line.h"
 #include <vector>
+#include <stack>
+using namespace std;
 
 IntersectionMap::IntersectionMap() {
     x = 0;
@@ -58,6 +60,71 @@ bool IntersectionMap::getPoint(int x, int y) {
     return false;
 }
 
+void IntersectionMap::floodFill() {
+    stack<Point> next;
+    // Find origin.
+    for (int y = 0; y < height; y++) {
+        bool prev = false;
+        bool found = false;
+        int count = 0;
+        int t_x = 0;
+        for (int x = 0; x < width; x++) {
+            int i = x + y * width;
+            if ((!prev) && (intersects[i])) {
+                if (!found) {
+                    t_x = x;
+                    if (intersects[i]) {
+                        t_x++;
+                    }
+                }
+                found = true;
+                count++;
+            }
+            prev = intersects[i];
+        }
+        if ((count >= 2) && ((t_x >= 0) && (y >= 0) && (t_x < width) && (y < height))) {
+            next.push(Point(t_x, y));
+        }
+    }
+    // Depth first flood filling.
+    while (!next.empty()) {
+        Point curr = next.top();
+        next.pop();
+        int i = curr.getX() + (curr.getY() * width);
+        if (!intersects[i]) {
+            intersects[i] = true;
+            Point up(curr.getX(), curr.getY() + 1);
+            if ((up.getX() >= 0) && (up.getY() >= 0) && (up.getX() < width) && (up.getY() < height)) {
+                i = up.getX() + (up.getY() * width);
+                if (!intersects[i]) {
+                    next.push(up);
+                }
+            }
+            Point down(curr.getX(), curr.getY() - 1);
+            if ((down.getX() >= 0) && (down.getY() >= 0) && (down.getX() < width) && (down.getY() < height)) {
+                i = down.getX() + (down.getY() * width);
+                if (!intersects[i]) {
+                    next.push(down);
+                }
+            }
+            Point left(curr.getX() - 1, curr.getY());
+            if ((left.getX() >= 0) && (left.getY() >= 0) && (left.getX() < width) && (left.getY() < height)) {
+                i = left.getX() + (left.getY() * width);
+                if (!intersects[i]) {
+                    next.push(left);
+                }
+            }
+            Point right(curr.getX() + 1, curr.getY());
+            if ((right.getX() >= 0) && (right.getY() >= 0) && (right.getX() < width) && (right.getY() < height)) {
+                i = right.getX() + (right.getY() * width);
+                if (!intersects[i]) {
+                    next.push(right);
+                }
+            }
+        }
+    }
+}
+
 void IntersectionMap::calculateIntersections(std::vector<Line *> lines) {
     if (!lines.empty()) {
         // Calculate boundary.
@@ -83,8 +150,8 @@ void IntersectionMap::calculateIntersections(std::vector<Line *> lines) {
         }
         x = min_x;
         y = min_y;
-        width = max_x - min_x;
-        height = max_y - min_y;
+        width = max_x - min_x + 1;
+        height = max_y - min_y + 1;
         delete[] intersects;
         intersects = new bool[width * height];
         for (int i = 0; i < width * height; i++) {

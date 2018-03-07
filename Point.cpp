@@ -6,11 +6,11 @@ Point::Point(): x(0), y(0) {
 Point::Point(float x, float y) : x(x), y(y) {
 }
 
-float Point::getX() {
+float Point::getX() const {
   return x;
 }
 
-float Point::getY() {
+float Point::getY() const {
   return y;
 }
 

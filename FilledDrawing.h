@@ -18,7 +18,7 @@ private:
 public:
   FilledDrawing(float x, float y, uint8_t r, uint8_t g, uint8_t b);
   FilledDrawing(const FilledDrawing& drawing);
-  FilledDrawing *clone ();
+  Drawable *clone ();
   void add (Drawable *drawable);
   void remove (Drawable *drawable);
   void draw (FrameBuffer& frameBuffer);
