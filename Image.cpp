@@ -42,6 +42,10 @@ Point Image::minBoundary() {
 Point Image::maxBoundary() {
     return Point(origin.getX() + width, origin.getY() + height);
 }
+
+void Image::setColor(uint8_t r, uint8_t g, uint8_t b) {
+}
+
 Drawable * Image::clone() {
     return new Image(origin.getX(), origin.getY(), img, width, height, bpp);
 }

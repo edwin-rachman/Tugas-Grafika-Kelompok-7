@@ -232,3 +232,12 @@ void FilledDrawing::clippedDraw(FrameBuffer& frameBuffer, float left, float top,
     }
 
 }
+
+void FilledDrawing::setColor(uint8_t r, uint8_t g, uint8_t b) {
+  fill_r = r;
+  fill_g = g;
+  fill_b = b;
+  for (auto& line : lines) {
+    line->setColor(r, g, b);
+  }
+}

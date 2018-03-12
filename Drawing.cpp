@@ -95,6 +95,12 @@ void Drawing::rotate (float angle, float origin_x, float origin_y) {
   _maxBoundary.rotate(angle, origin_x, origin_y);
 }
 
+void Drawing::setColor(uint8_t r, uint8_t g, uint8_t b) {
+  for (auto& drawable : drawables) {
+    drawable->setColor(r, g, b);
+  }
+}
+
 Point Drawing::getOrigin () {
   return origin;
 }

@@ -1,6 +1,6 @@
 #include "Line.h"
 
-Line::Line(Point p0, Point p1) : p0(p0), p1(p1) {
+Line::Line(Point p0, Point p1, uint8_t r, uint8_t g, uint8_t b) : p0(p0), p1(p1), r(r), g(g), b(b) {
 }
 
 Line::Line(float x_0, float y_0, float x_1, float y_1, uint8_t r, uint8_t g, uint8_t b)
@@ -145,6 +145,12 @@ void Line::scale(float scale_x, float scale_y, float origin_x, float origin_y) {
 void Line::rotate(float angle, float origin_x, float origin_y) {
   p0.rotate(angle, origin_x, origin_y);
   p1.rotate(angle, origin_x, origin_y);
+}
+
+void Line::setColor(uint8_t r, uint8_t g, uint8_t b) {
+  this->r = r;
+  this->g = g;
+  this->b = b;
 }
 
 float Line::getXIntersection(float y) {
