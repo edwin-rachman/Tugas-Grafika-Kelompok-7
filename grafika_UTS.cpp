@@ -116,8 +116,8 @@ int main() {
     frame.add(new Line(right, bottom, left, bottom, 0x00, 0x00, 0xFF));
     frame.add(new Line(left, bottom, left, top, 0x00, 0x00, 0xFF));
 
-    Drawing plane(frameBuffer.getWidth() / 2, 15);
-    plane.add(BuildCharFilled(0,0, "assets/plane_top.txt", 10, 10, 0xCC, 0xEA, 0xBC));
+    Drawing plane(100, 100);
+    plane.add(BuildCharFilled(0, 0, "assets/plane_top.txt", 5, 5, 0xCC, 0xEA, 0xBC));
 
     bool show_b = false;
     int color = 0;
@@ -184,7 +184,7 @@ int main() {
             crosshair.setColor(r, g, b);
           }
           if (mouseInputListener.isLeftClicked() && x >= left && x <= right && y >= top && y <= bottom) {
-            root.add(BuildCharFilled(x - pos_x, y - pos_y, "brush/square.txt", 1, 1, r, g, b));
+            //root.add(BuildCharFilled(x - pos_x, y - pos_y, "brush/square.txt", 1, 1, r, g, b));
           }
         }
 
@@ -198,6 +198,7 @@ int main() {
         minimap->draw(frameBuffer);
         cursor.draw(frameBuffer);
         crosshair.draw(frameBuffer);
+        plane.draw(frameBuffer);
         frameBuffer.swapBuffers();
     }
 
