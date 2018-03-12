@@ -65,19 +65,12 @@ void IntersectionMap::floodFill() {
     // Find origin.
     for (int y = 0; y < height; y++) {
         bool prev = false;
-        bool found = false;
         int count = 0;
         int t_x = 0;
         for (int x = 0; x < width; x++) {
             int i = x + y * width;
             if ((!prev) && (intersects[i])) {
-                if (!found) {
-                    t_x = x;
-                    if (intersects[i]) {
-                        t_x++;
-                    }
-                }
-                found = true;
+                t_x = x - 1;
                 count++;
             }
             prev = intersects[i];

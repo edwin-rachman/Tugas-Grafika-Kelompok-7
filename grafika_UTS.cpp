@@ -9,6 +9,7 @@
 #include "MouseInputListener.h"
 #include "CharBuilder.h"
 #include "Image.h"
+#include "ShapeBuilder.h"
 using namespace std;
 
 const float PI = std::acos(-1);
@@ -80,12 +81,18 @@ int main() {
     // float pos_x = 0;
     // float pos_y = 0;
 
-    float minimap_scale = 0.25f;
     Drawable * minimap = root.clone();
-    minimap->scale(minimap_scale, minimap_scale, 0, 0);
 
     float m_size_x = minimap->maxBoundary().getX() - minimap->minBoundary().getX();
     float m_size_y = minimap->maxBoundary().getY() - minimap->minBoundary().getY();
+    
+    float minimap_scale = 100.0f / m_size_y;
+    minimap->scale(minimap_scale, minimap_scale, 0, 0);
+
+    Drawing * minimap_background = createFilledBox(minimap->minBoundary().getX(), minimap->minBoundary().getY(), minimap->maxBoundary().getX(), minimap->maxBoundary().getY(), 0x20, 0x20, 0x20);
+
+    m_size_x *= minimap_scale;
+    m_size_y *= minimap_scale;
 
     float b_size_x = ((right - left) / size_x) * m_size_x;
     float b_size_y = ((bottom - top) / size_y) * m_size_y;
@@ -103,12 +110,17 @@ int main() {
     cursor.translate((m_size_x - b_size_x) / 2, (m_size_y - b_size_y) / 2);
     root.translate(pos_x, pos_y);
 
-    Drawing crosshair(0, 0);
-    crosshair.add(new Line(0, -5, 0, -2, 0x00, 0x00, 0x00));
-    crosshair.add(new Line(0, 5, 0, 2, 0x00, 0x00, 0x00));
-    crosshair.add(new Line(5, 0, 2, 0, 0x00, 0x00, 0x00));
-    crosshair.add(new Line(-5, 0, -2, 0, 0x00, 0x00, 0x00));
+    FilledDrawing crosshair(0, 0, 0xFF, 0xFF, 0xFF);
+    // Drawing crosshair(0, 0);
+    crosshair.add(new Line(0, 8, 0, 0, 0x00, 0x00, 0x00));
+    crosshair.add(new Line(0, 8, 2, 6, 0x00, 0x00, 0x00));
+    crosshair.add(new Line(2, 6, 5, 10, 0x00, 0x00, 0x00));
+    crosshair.add(new Line(5, 10, 7, 8.5f, 0x00, 0x00, 0x00));
+    crosshair.add(new Line(7, 8.5f, 4.2f, 5, 0x00, 0x00, 0x00));
+    crosshair.add(new Line(7, 4, 4.2f, 5, 0x00, 0x00, 0x00));
+    crosshair.add(new Line(0, 0, 7, 4, 0x00, 0x00, 0x00));
     crosshair.translate(frameBuffer.getWidth() / 2, frameBuffer.getHeight() / 2);
+    crosshair.scale(1.5f, 1.5f, crosshair.getOrigin().getX(), crosshair.getOrigin().getY());
 
     Drawing frame(0, 0);
     frame.add(new Line(left, top, right, top, 0x00, 0x00, 0xFF));
@@ -116,8 +128,13 @@ int main() {
     frame.add(new Line(right, bottom, left, bottom, 0x00, 0x00, 0xFF));
     frame.add(new Line(left, bottom, left, top, 0x00, 0x00, 0xFF));
 
-    Drawing plane(100, 100);
-    plane.add(BuildCharFilled(0, 0, "assets/plane_top.txt", 5, 5, 0xCC, 0xEA, 0xBC));
+    Drawing plane(0, 0);
+    plane.add(BuildCharFilled(0, 0, "assets/jet.txt", 5, 5, 0xCC, 0xEA, 0xBC));
+    plane.scale(0.75f, 0.75f, plane.getOrigin().getX(), plane.getOrigin().getY());
+    root.add(&plane);
+    float plane_x = plane.getOrigin().getX();
+    float plane_y = plane.getOrigin().getY();
+    plane.rotate(30, plane_x, plane_y);
 
     bool show_b = false;
     int color = 0;
@@ -181,7 +198,7 @@ int main() {
           uint8_t g = color & 0x2 ? 0xFF: 0x00;
           uint8_t b = color & 0x4 ? 0xFF: 0x00;
           if (mouseInputListener.isRightClicked()) {
-            crosshair.setColor(r, g, b);
+            //crosshair.setColor(r, g, b);
           }
           if (mouseInputListener.isLeftClicked() && x >= left && x <= right && y >= top && y <= bottom) {
             //root.add(BuildCharFilled(x - pos_x, y - pos_y, "brush/square.txt", 1, 1, r, g, b));
@@ -195,10 +212,11 @@ int main() {
         }
         root.clippedDraw(frameBuffer, left, top, right, bottom);
         frame.draw(frameBuffer);
+        minimap_background->draw(frameBuffer);
         minimap->draw(frameBuffer);
-        cursor.draw(frameBuffer);
+        cursor.clippedDraw(frameBuffer, minimap->minBoundary().getX(), minimap->minBoundary().getY(), minimap->maxBoundary().getX(), minimap->maxBoundary().getY());
         crosshair.draw(frameBuffer);
-        plane.draw(frameBuffer);
+        //plane.draw(frameBuffer);
         frameBuffer.swapBuffers();
     }
 
