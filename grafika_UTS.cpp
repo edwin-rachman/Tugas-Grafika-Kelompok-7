@@ -1,8 +1,10 @@
 #include <iostream>
 #include <ctime>
 #include <fstream>
-#include <math.h>
+#include <cmath>
+#include <cstdlib>
 #include <limits>
+#include <random>
 #include "Line.h"
 #include "Drawing.h"
 #include "FilledDrawing.h"
@@ -133,7 +135,10 @@ int main() {
     Drawing plane(0, 0);
     plane.add(BuildCharFilled(0, 0, "assets/plane.txt", 5, 5, 0xCC, 0xEA, 0xBC));
     plane.scale(0.75f, 0.75f, plane.getOrigin().getX(), plane.getOrigin().getY());
-    root.add(&plane);
+
+    Drawing bombs(0, 0);
+
+    // root.add(&plane);
     float plane_x = plane.getOrigin().getX();
     float plane_y = plane.getOrigin().getY();
     bool show_b = false;
@@ -146,7 +151,16 @@ int main() {
 
     float dest_plane_x = plane_x;
     float dest_plane_y = plane_y;
-    float plane_speed = 5;
+    float plane_speed = 10;
+
+    bool m_right_clicked = false;
+    bool m_left_clicked = false;
+    int toBombCount = 0;
+    const float bombRadius = 20;
+    const float bombScatter = 20;
+    const int bombInterval = 2;
+    const int bombPerlaunch = 1;
+    int bombTick = 0;
 
     while (running) {
         if (keyboardInputListener.receivedInput()) {
@@ -166,6 +180,8 @@ int main() {
                     dest_plane_x = (dest_plane_x - cx) / d_scale + cx;
                     dest_plane_y = (dest_plane_y - cy) / d_scale + cy;
                     root.scale(1/d_scale, 1/d_scale, cx, cy);
+                    plane.scale(1/d_scale, 1/d_scale, cx, cy);
+                    bombs.scale(1/d_scale, 1/d_scale, cx, cy);
                     cursor.scale(d_scale, d_scale, cursor.getOrigin().getX() + (b_size_x * cursor_scale) / 2, cursor.getOrigin().getY() + (b_size_y * cursor_scale) / 2);
                     cursor_scale_x *= d_scale;
                     cursor_scale_y *= d_scale;
@@ -180,6 +196,8 @@ int main() {
                     dest_plane_x = (dest_plane_x - cx) * d_scale + cx;
                     dest_plane_y = (dest_plane_y - cy) * d_scale + cy;
                     root.scale(d_scale, d_scale, cx, cy);
+                    plane.scale(d_scale, d_scale, cx, cy);
+                    bombs.scale(d_scale, d_scale, cx, cy);
                     cursor.scale(1/d_scale, 1/d_scale, cursor.getOrigin().getX() + (b_size_x * cursor_scale) / 2, cursor.getOrigin().getY() + (b_size_y * cursor_scale) / 2);
                     cursor_scale_x /= d_scale;
                     cursor_scale_y /= d_scale;
@@ -187,22 +205,34 @@ int main() {
                     break;
                 case 97: // A key
                     pos_x += move_speed;
+                    dest_plane_x += move_speed;
                     root.translate(move_speed, 0);
+                    plane.translate(move_speed, 0);
+                    bombs.translate(move_speed, 0);
                     cursor.translate(-move_speed * cursor_scale_x, 0);
                     break;
                 case 100: // D key
                     pos_x -= move_speed;
+                    dest_plane_x -= move_speed;
                     root.translate(-move_speed, 0);
+                    plane.translate(-move_speed, 0);
+                    bombs.translate(-move_speed, 0);
                     cursor.translate(move_speed * cursor_scale_x, 0);
                     break;
                 case 119: // W key
                     pos_y += move_speed;
+                    dest_plane_y += move_speed;
                     root.translate(0, move_speed);
+                    plane.translate(0, move_speed);
+                    bombs.translate(0, move_speed);
                     cursor.translate(0, -move_speed * cursor_scale_y);
                     break;
                 case 115: // S key
                     pos_y -= move_speed;
+                    dest_plane_y -= move_speed;
                     root.translate(0, -move_speed);
+                    plane.translate(0, -move_speed);
+                    bombs.translate(0, -move_speed);
                     cursor.translate(0, move_speed * cursor_scale_y);
                     break;
             }
@@ -219,13 +249,43 @@ int main() {
             uint8_t g = color & 0x2 ? 0xFF: 0x00;
             uint8_t b = color & 0x4 ? 0xFF: 0x00;
             if (mouseInputListener.isRightClicked()) {
-                //crosshair.setColor(r, g, b);
+                if (!m_right_clicked) { // OnDown.
+
+                }
+                m_right_clicked = true;
+            } else {
+                if (m_right_clicked) { // OnUp.
+                    if (toBombCount == 0) {
+                        toBombCount = bombPerlaunch;
+                    }
+                }
+                m_right_clicked = false;
             }
             if (mouseInputListener.isLeftClicked() && x >= left && x <= right && y >= top && y <= bottom) {
                 dest_plane_x = x;
                 dest_plane_y = y;
                 plane_moving = true;
                 //root.add(BuildCharFilled(x - pos_x, y - pos_y, "brush/square.txt", 1, 1, r, g, b));
+                m_left_clicked = true;
+            } else {
+                m_left_clicked = false;
+            }
+        }
+
+        if (toBombCount > 0) {
+            bombTick++;
+            if (bombTick >= bombInterval) {
+                float tx = plane.getOrigin().getX();
+                float ty = plane.getOrigin().getY();
+                cx = bombs.getOrigin().getX();
+                cy = bombs.getOrigin().getY();
+                float offset_x = (((float)rand())/RAND_MAX - 0.5f) * bombScatter / scale;
+                float offset_y = (((float)rand())/RAND_MAX - 0.5f) * bombScatter / scale;
+                Drawing * bomb = createFilledCircle((tx - cx) + offset_x, (ty - cy) + offset_y, bombRadius, 0xFF, 0x00, 0x00, 18);
+                bomb->scale(1.0f/scale, 1.0f/scale, bomb->getOrigin().getX(), bomb->getOrigin().getY());
+                bombs.add(bomb);
+                toBombCount--;
+                bombTick = 0;
             }
         }
 
@@ -235,10 +295,12 @@ int main() {
             b_image.draw(frameBuffer);
         }
         root.clippedDraw(frameBuffer, left, top, right, bottom);
-        frame.draw(frameBuffer);
         minimap_background->draw(frameBuffer);
         minimap->draw(frameBuffer);
         cursor.clippedDraw(frameBuffer, minimap->minBoundary().getX(), minimap->minBoundary().getY(), minimap->maxBoundary().getX(), minimap->maxBoundary().getY());
+        bombs.clippedDraw(frameBuffer, left, top, right, bottom);
+        plane.clippedDraw(frameBuffer, left, top, right, bottom);
+        frame.draw(frameBuffer);
         crosshair.draw(frameBuffer);
         //plane.draw(frameBuffer);
 

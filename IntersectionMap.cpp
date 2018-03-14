@@ -63,21 +63,33 @@ bool IntersectionMap::getPoint(int x, int y) {
 void IntersectionMap::floodFill() {
     stack<Point> next;
     // Find origin.
-    for (int y = 0; y < height; y++) {
+    bool found = false;
+    int y = height / 2;
+    while ((!found) && (y < height)) {
         bool prev = false;
         int count = 0;
         int t_x = 0;
-        for (int x = 0; x < width; x++) {
+        int x = 0;
+        while (x < width) {
             int i = x + y * width;
             if ((!prev) && (intersects[i])) {
-                t_x = x - 1;
+                if (count == 0) {
+                    while ((x < width) && (intersects[i])) {
+                        i++;
+                        x++;
+                    }
+                    t_x = x;
+                }
                 count++;
             }
             prev = intersects[i];
+            x++;
         }
         if ((count >= 2) && (count % 2 == 0) && ((t_x >= 0) && (y >= 0) && (t_x < width) && (y < height))) {
             next.push(Point(t_x, y));
+            found = true;
         }
+        y++;
     }
     // Depth first flood filling.
     while (!next.empty()) {
