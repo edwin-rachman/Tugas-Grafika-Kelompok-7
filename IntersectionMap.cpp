@@ -75,7 +75,7 @@ void IntersectionMap::floodFill() {
             }
             prev = intersects[i];
         }
-        if ((count >= 2) && ((t_x >= 0) && (y >= 0) && (t_x < width) && (y < height))) {
+        if ((count >= 2) && (count % 2 == 0) && ((t_x >= 0) && (y >= 0) && (t_x < width) && (y < height))) {
             next.push(Point(t_x, y));
         }
     }
