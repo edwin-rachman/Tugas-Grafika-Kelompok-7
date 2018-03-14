@@ -8,11 +8,9 @@
 #include "Line.h"
 #include "Drawing.h"
 #include "FilledDrawing.h"
-#include "FloodFill.h"
 #include "KeyboardInputListener.h"
 #include "MouseInputListener.h"
 #include "CharBuilder.h"
-#include "Image.h"
 #include "ShapeBuilder.h"
 #include "TextObject.h"
 using namespace std;
@@ -30,24 +28,6 @@ int main() {
     mouseInputListener.start();
 
     Drawing root(0, 0);
-
-    ifstream stream("peta.txt", ifstream::in);
-    int w, h, count;
-    stream >> w;
-    stream >> h;
-    count = w * h * 3;
-    uint8_t * bytes = new uint8_t[count];
-    for (int i = 0; i < count; i++) {
-        int v;
-        stream >> v;
-        bytes[i] = (uint8_t) v;
-    }
-    stream.close();
-
-    Drawing b_image(-6, -207);
-    Image image(0, 0, bytes, w, h, 3);
-
-    b_image.add(&image);
 
     Drawing layout(0, 0);
     layout.add(BuildChar(0, 0, "itb/layout.txt", 1, 1, 0x99, 0x99, 0x99));
@@ -142,7 +122,6 @@ int main() {
     // root.add(&plane);
     float plane_x = plane.getOrigin().getX();
     float plane_y = plane.getOrigin().getY();
-    bool show_b = false;
     int color = 0;
 
     float cx, cy;
@@ -298,9 +277,6 @@ int main() {
 
         frameBuffer.fill(frameBuffer.getColor(0x40, 0x40, 0x40));
 
-        if (show_b) {
-            b_image.draw(frameBuffer);
-        }
         root.clippedDraw(frameBuffer, left, top, right, bottom);
         minimap_background->draw(frameBuffer);
         minimap->draw(frameBuffer);
