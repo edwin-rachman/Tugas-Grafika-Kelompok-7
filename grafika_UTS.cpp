@@ -89,7 +89,7 @@ int main() {
 
     float m_size_x = minimap->maxBoundary().getX() - minimap->minBoundary().getX();
     float m_size_y = minimap->maxBoundary().getY() - minimap->minBoundary().getY();
-    
+
     float minimap_scale = 100.0f / m_size_y;
     minimap->scale(minimap_scale, minimap_scale, 0, 0);
 
@@ -163,7 +163,7 @@ int main() {
     int bombTick = 0;
 
     Drawing * tes1 = createCharacter('a', 5, 100, 30, 0x00, 0xFF, 0x00);
-    Drawing * tes2 = createFilledCharacter('a', 5, 150, 30, 0x00, 0xFF, 0x00);
+    Drawing * tes2 = createFilledCharacter('M', 5, 150, 30, 0x00, 0xFF, 0x00);
 
     while (running) {
         if (keyboardInputListener.receivedInput()) {
