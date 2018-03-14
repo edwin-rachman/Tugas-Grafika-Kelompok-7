@@ -10,4 +10,7 @@ Drawing * createFilledBox(float min_x, float min_y, float max_x, float max_y, ui
 Drawing * createCircle(float x, float y, float radius, uint8_t r, uint8_t g, uint8_t b, int segments = 12);
 Drawing * createFilledCircle(float x, float y, float radius, uint8_t r, uint8_t g, uint8_t b, int segments = 12);
 
+Drawing * createCharacter(char c, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b);
+Drawing * createFilledCharacter(char c, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b);
+
 #endif

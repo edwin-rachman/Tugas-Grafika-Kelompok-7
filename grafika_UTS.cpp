@@ -162,6 +162,9 @@ int main() {
     const int bombPerlaunch = 1;
     int bombTick = 0;
 
+    Drawing * tes1 = createCharacter('a', 5, 100, 30, 0x00, 0xFF, 0x00);
+    Drawing * tes2 = createFilledCharacter('a', 5, 150, 30, 0x00, 0xFF, 0x00);
+
     while (running) {
         if (keyboardInputListener.receivedInput()) {
             switch (keyboardInputListener.getInput()) {
@@ -301,7 +304,8 @@ int main() {
         bombs.clippedDraw(frameBuffer, left, top, right, bottom);
         plane.clippedDraw(frameBuffer, left, top, right, bottom);
         frame.draw(frameBuffer);
-        crosshair.draw(frameBuffer);
+        tes1->draw(frameBuffer);
+        tes2->draw(frameBuffer);
         //plane.draw(frameBuffer);
 
         plane_x = plane.getOrigin().getX();
@@ -325,6 +329,7 @@ int main() {
             plane_moving = false;
         }
 
+        crosshair.draw(frameBuffer);
         frameBuffer.swapBuffers();
     }
 

@@ -1,8 +1,28 @@
 #include "ShapeBuilder.h"
+#include "CharBuilder.h"
 #include <math.h>
+#include <iostream>
 using namespace std;
 
 const float PI = acos(-1);
+
+Drawing * createCharacter(char c, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b) {
+    // Convert to upper case.
+    if ((c >= 'a') && (c <= 'z')) {
+        c += 'A'-'a';
+    }
+    string filename = "filled_font/"+string(1, c)+".txt";
+    return BuildChar(x, y, filename, size, size, r, g, b);
+}
+
+Drawing * createFilledCharacter(char c, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b) {
+    // Convert to upper case.
+    if ((c >= 'a') && (c <= 'z')) {
+        c += 'A'-'a';
+    }
+    string filename = "filled_font/"+string(1, c)+".txt";
+    return BuildCharFilled(x, y, filename, size, size, r, g, b);
+}
 
 Drawing * createBox(float min_x, float min_y, float max_x, float max_y, uint8_t r, uint8_t g, uint8_t b) {
     Drawing * newDrawing = new Drawing((min_x + max_x) / 2, (min_y + max_y) / 2);
