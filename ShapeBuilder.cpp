@@ -2,26 +2,87 @@
 #include "CharBuilder.h"
 #include <math.h>
 #include <iostream>
+#include <string>
 using namespace std;
 
 const float PI = acos(-1);
+
+Drawing * createText(string text, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b) {
+    Drawing * root = new Drawing(x, y);
+    float offset = 0;
+    float r_size = size * 9;
+    for (int i = 0; i < text.size(); i++) {
+        Drawing * character = createFilledCharacter(text[i], size, offset, 0, r, g, b);
+        root->add(character);
+        // offset += character->maxBoundary().getX() - character->minBoundary().getX() + size;
+        offset += r_size;
+    }
+    return root;
+}
 
 Drawing * createCharacter(char c, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b) {
     // Convert to upper case.
     if ((c >= 'a') && (c <= 'z')) {
         c += 'A'-'a';
     }
-    string filename = "filled_font/"+string(1, c)+".txt";
-    return BuildChar(x, y, filename, size, size, r, g, b);
+
+    string char_name;
+
+    if ((c >= 'A') && (c <= 'Z')) {
+        char_name = string(1, c);
+    }
+
+    if (c == ':') {
+        Drawing * nDrawing = new Drawing(x, y);
+        Drawing * dot = BuildChar(0, 0, "filled_font/dot.txt", size, size, r, g, b);
+        Drawing * dot2 = BuildChar(0, 0, "filled_font/dot.txt", size, size, r, g, b);
+        nDrawing->add(dot);
+        nDrawing->add(dot2);
+        dot->translate(0, -size * 4);
+        return nDrawing;
+    } else if (c == '.') {
+        const char* str = "dot";
+        char_name = str;
+    }
+
+    if (char_name != "") {
+
+        string filename = "filled_font/" + char_name + ".txt";
+        return BuildChar(x, y, filename, size, size, r, g, b);
+    }
+    return new Drawing(x, y);
 }
 
 Drawing * createFilledCharacter(char c, float size, float x, float y, uint8_t r, uint8_t g, uint8_t b) {
-    // Convert to upper case.
     if ((c >= 'a') && (c <= 'z')) {
         c += 'A'-'a';
     }
-    string filename = "filled_font/"+string(1, c)+".txt";
-    return BuildCharFilled(x, y, filename, size, size, r, g, b);
+
+    string char_name;
+
+    if ((c >= 'A') && (c <= 'Z')) {
+        char_name = string(1, c);
+    }
+
+    if (c == ':') {
+        Drawing * nDrawing = new Drawing(x, y);
+        Drawing * dot = BuildCharFilled(0, 0, "filled_font/dot.txt", size, size, r, g, b);
+        Drawing * dot2 = BuildCharFilled(0, 0, "filled_font/dot.txt", size, size, r, g, b);
+        nDrawing->add(dot);
+        nDrawing->add(dot2);
+        dot->translate(0, -size * 4);
+        return nDrawing;
+    } else if (c == '.') {
+        const char* str = "dot";
+        char_name = str;
+    }
+
+    if (char_name != "") {
+
+        string filename = "filled_font/" + char_name + ".txt";
+        return BuildCharFilled(x, y, filename, size, size, r, g, b);
+    }
+    return new Drawing(x, y);
 }
 
 Drawing * createBox(float min_x, float min_y, float max_x, float max_y, uint8_t r, uint8_t g, uint8_t b) {

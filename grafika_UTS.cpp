@@ -14,6 +14,7 @@
 #include "CharBuilder.h"
 #include "Image.h"
 #include "ShapeBuilder.h"
+#include "TextObject.h"
 using namespace std;
 
 const float PI = std::acos(-1);
@@ -161,9 +162,12 @@ int main() {
     const int bombInterval = 2;
     const int bombPerlaunch = 1;
     int bombTick = 0;
+    int bombCount = 0;
 
-    Drawing * tes1 = createCharacter('a', 5, 100, 30, 0x00, 0xFF, 0x00);
-    Drawing * tes2 = createFilledCharacter('a', 5, 150, 30, 0x00, 0xFF, 0x00);
+    Drawing * tes0 = createCharacter('a', 5, 100, 30, 0x00, 0xFF, 0x00);
+    Drawing * tes1 = createCharacter(':', 5, 150, 30, 0x00, 0xFF, 0x00);
+    Drawing * tes2 = createFilledCharacter(':', 5, 200, 30, 0x00, 0xFF, 0x00);
+    Text * tes3 = new Text("bomb:", 5, 250, 30, 0x00, 0xFF, 0x00);
 
     while (running) {
         if (keyboardInputListener.receivedInput()) {
@@ -272,6 +276,7 @@ int main() {
                 m_left_clicked = true;
             } else {
                 m_left_clicked = false;
+                tes3->setText("bb");
             }
         }
 
@@ -289,6 +294,7 @@ int main() {
                 bombs.add(bomb);
                 toBombCount--;
                 bombTick = 0;
+                bombCount++;
             }
         }
 
@@ -304,8 +310,10 @@ int main() {
         bombs.clippedDraw(frameBuffer, left, top, right, bottom);
         plane.clippedDraw(frameBuffer, left, top, right, bottom);
         frame.draw(frameBuffer);
+        tes0->draw(frameBuffer);
         tes1->draw(frameBuffer);
         tes2->draw(frameBuffer);
+        tes3->draw(frameBuffer);
         //plane.draw(frameBuffer);
 
         plane_x = plane.getOrigin().getX();
