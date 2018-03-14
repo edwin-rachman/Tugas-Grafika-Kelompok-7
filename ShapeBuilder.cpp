@@ -30,6 +30,8 @@ Drawing * createCharacter(char c, float size, float x, float y, uint8_t r, uint8
 
     if ((c >= 'A') && (c <= 'Z')) {
         char_name = string(1, c);
+    } else if ((c >= '0') && (c <= '9')) {
+        char_name = string(1, c);
     }
 
     if (c == ':') {
@@ -61,6 +63,8 @@ Drawing * createFilledCharacter(char c, float size, float x, float y, uint8_t r,
     string char_name;
 
     if ((c >= 'A') && (c <= 'Z')) {
+        char_name = string(1, c);
+    } else if ((c >= '0') && (c <= '9')) {
         char_name = string(1, c);
     }
 

@@ -90,7 +90,7 @@ int main() {
 
     float m_size_x = minimap->maxBoundary().getX() - minimap->minBoundary().getX();
     float m_size_y = minimap->maxBoundary().getY() - minimap->minBoundary().getY();
-    
+
     float minimap_scale = 100.0f / m_size_y;
     minimap->scale(minimap_scale, minimap_scale, 0, 0);
 
@@ -164,10 +164,8 @@ int main() {
     int bombTick = 0;
     int bombCount = 0;
 
-    Drawing * tes0 = createCharacter('a', 5, 100, 30, 0x00, 0xFF, 0x00);
-    Drawing * tes1 = createCharacter(':', 5, 150, 30, 0x00, 0xFF, 0x00);
-    Drawing * tes2 = createFilledCharacter(':', 5, 200, 30, 0x00, 0xFF, 0x00);
-    Text * tes3 = new Text("bomb:", 5, 250, 30, 0x00, 0xFF, 0x00);
+    Text * tes3 = new Text("bomb:0", 5, 250, 30, 0x00, 0xFF, 0x00);
+    // Text * tes3 = new Text("bomb:0123456789", 5, 100, 30, 0x00, 0xFF, 0x00);
 
     while (running) {
         if (keyboardInputListener.receivedInput()) {
@@ -276,7 +274,6 @@ int main() {
                 m_left_clicked = true;
             } else {
                 m_left_clicked = false;
-                tes3->setText("bb");
             }
         }
 
@@ -295,6 +292,7 @@ int main() {
                 toBombCount--;
                 bombTick = 0;
                 bombCount++;
+                tes3->setText("bomb:" + to_string(bombCount));
             }
         }
 
@@ -310,9 +308,6 @@ int main() {
         bombs.clippedDraw(frameBuffer, left, top, right, bottom);
         plane.clippedDraw(frameBuffer, left, top, right, bottom);
         frame.draw(frameBuffer);
-        tes0->draw(frameBuffer);
-        tes1->draw(frameBuffer);
-        tes2->draw(frameBuffer);
         tes3->draw(frameBuffer);
         //plane.draw(frameBuffer);
 
