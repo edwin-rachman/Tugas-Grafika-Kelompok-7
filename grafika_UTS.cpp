@@ -163,7 +163,7 @@ int main() {
     int bombTick = 0;
 
     Drawing * tes1 = createCharacter('a', 5, 100, 30, 0x00, 0xFF, 0x00);
-    Drawing * tes2 = createFilledCharacter('6', 5, 150, 30, 0x00, 0xFF, 0x00);
+    Drawing * tes2 = createFilledCharacter('9', 5, 150, 30, 0x00, 0xFF, 0x00);
 
     while (running) {
         if (keyboardInputListener.receivedInput()) {
